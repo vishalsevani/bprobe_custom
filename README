@@ -1,0 +1,52 @@
+Installation Doc for Bprobe and Cprobe
+--------------------------------------
+
+All the necessary files are in probes.tar.Z. Unpacking this
+file will create a subdirectory named "Release" in the current
+directory. Change to that directory and you can "make" the
+probe tools.
+
+Running the tools
+-----------------
+
+After installation and building you have two executables:
+bprobe and cprobe. Both must be made SUID root (see RESTRICTIONS section). 
+Each takes a single parameter: the name (or IP address) of the target
+host. For example:
+
+> bprobe tonka
+BRPROBE (1.0) tonka
+Final Bandwidth: 9.66140e+06
+> cprobe tonka
+CPROBE (1.0) tonka
+Available Bandwidth: 6450391.00000
+
+The output for each tool consists of a line giving the
+name, version and target followed by a line reporting
+either the measured bottleneck bandwidth (bprobe) or the measured
+available bandwidth (cprobe).
+
+RESTRICTIONS
+------------
+
+At present this code is SGI-specific in the following ways:
+
+1) Use of high-resolution timer in rprobeGuts.c
+
+2) Ability of process to adjust its scheduling priority dynamically
+   in raisePriority.c
+
+Also, because these tools use ICMP packets, is is necessary that they
+be SUID root to run. Thus you need root premission to build them. This
+is accounted for in the makefile through the use of the "sudo" command.
+If this is not installed on your system then you need to adjust
+the Makefile and build process accordingly.
+
+An alternate workaround that allows general use of the tools is
+to set up a daemon process that does the actual probing and use
+generic UDP for communication with the daemon. We have integrated our
+tools withe the SONAR implementation to provide such a facility as
+well as providing a daemon that can be run remotely and queried from
+anywhere. For more on SONAR see the SONAR home page at http://www.netlib.org/utk/projects/sonar/. TO install and build the SONAR/BPROBE
+daemon see README.SONAR available in another tar archive from 
+http://cs-www.bu.edu/students/grads/carter/tools/Tools.html.
